@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雪花</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-image: url(xue.webp);
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+    <canvas></canvas>
+    <script>
+        //准备画布
+        let canvas = document.querySelector('canvas');//拿到画布的对象
+        let context = canvas.getContext('2d');//定义画笔
+        let w = window.innerWidth;
+        let h = window.innerHeight;//设置画布大小
+        canvas.width =w;
+        canvas.height = h;
+
+        let num = 290;//定义雪花的数量
+        let snows = [];//存放雪花的信息
+        //雪花出现的位置
+        for(let i =0;i<num;i++){
+            snows.push({
+                x:Math.random()*w,//水平位置
+                y:Math.random()*h,//垂直位置
+                r:Math.random()*20+1
+            });
+        }
+        //控制雪花掉落
+        let move=()=>{
+            for(let i = 0;i<num;i++){
+                let snow = snows[i];
+                snow.x += Math.random()*2+1;
+                snow.y += Math.random()*2+1;
+                if(snow.x>w){
+                    snow.x = 0;
+                }
+                if(snow.y>h){
+                    snow.y = 0;
+                }
+            }
+
+        }
+        //将雪花画到画布上边
+        let draw = () =>{
+            context.clearRect(0,0,w,h);//清除画布上的东西
+            context.beginPath()
+            context.fillStyle = 'rgb(255,255,255)';
+            context.shadowColor = 'rgb(255,255,255)';
+            context.shadowBlur = 10;
+
+            for(let i = 0;i<num;i++){
+                let snow = snows[i];
+                context.moveTo(snow.x,snow.y);//让画笔从这个位置开始画
+                context.arc(snow.x,snow.y,snow.r,0,Math.PI/2);
+            }
+            context.fill();//填充到画布上
+            context.closePath();//结束画画的步骤
+            move();
+       }
+       draw();
+       setInterval(draw,30);
+
+    </script>
+    
+</body>
+</html>
